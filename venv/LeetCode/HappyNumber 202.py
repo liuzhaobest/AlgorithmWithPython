@@ -17,20 +17,44 @@ Explanation:
 
 """
 
+def isHappy(n: int) -> bool:
+
+    def get_next(n):
+        total_sum = 0
+        while n > 0:
+            n, digit = divmod(n, 10)
+            total_sum += digit ** 2
+        return total_sum
+
+    seen = set()
+    while n != 1 and n not in seen:
+        seen.add(n)
+        n = get_next(n)
+
+    return n == 1
+
+
+
+
+"""
+Two pointers solution
+"""
 def isHappy(self, n: int) -> bool:
-    if(n == 1):
-        return True
+    def get_next(number):
+        total_sum = 0
+        while number > 0:
+            number, digit = divmod(number, 10)
+            total_sum += digit ** 2
+        return total_sum
 
-    def helper(k: int) -> bool:
-        if(k == 1):
-            return True
-        return helper(calc(k))
-
-    def calc(m: int) -> int:
-        result = 0
-        while(m > 0):
-            result  = result + (m%10) * (m%10)
-            m = m // 10
-        return result
+    slow_runner = n
+    fast_runner = get_next(n)
+    while fast_runner != 1 and slow_runner != fast_runner:
+        slow_runner = get_next(slow_runner)
+        fast_runner = get_next(get_next(fast_runner))
+    return fast_runner == 1
 
 
+
+
+print(isHappy(4))
